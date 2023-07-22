@@ -1,0 +1,27 @@
+.navbar-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: whitesmoke;
+  border-bottom: 1px solid lightsteelblue;
+  width: 100vw;
+  height: 75px;
+  padding: 10px 25px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  box-sizing: border-box;
+}
+
+.navbar-container > a {
+  padding: 8px 15px;
+  cursor: pointer;
+  border-radius: 4px;
+  color: #0d5494;
+  text-decoration: none;
+  transition-duration: 0.2s;
+}
+
+.navbar-container > a:hover {
+  background-color: lightblue;
+}
