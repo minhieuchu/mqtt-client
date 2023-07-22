@@ -5,12 +5,17 @@ import NavBar from "./components/NavBar";
 import Device from "./pages/Device";
 import DashBoard from "./pages/DashBoard";
 import ErrorPage from "./pages/ErrorPage";
+import { DataPointModel, DeviceModel } from "./common/types";
 
 const DEVICE_TOPIC = "/device/6f9ea7c7-6297-4283-b72d-7d673d3473fd";
 const TEMPERATURE_TOPIC = DEVICE_TOPIC + "/Temperature";
 
 export default function App() {
   const [mqttClient, setMqttClient] = useState<mqtt.MqttClient | null>(null);
+  const [deviceModel, setDeviceModel] = useState<DeviceModel | null>(null);
+  const [dataPointModel, setDataPointModel] = useState<DataPointModel | null>(
+    null
+  );
 
   useEffect(() => {
     const host = "broker.emqx.io";
@@ -34,9 +39,11 @@ export default function App() {
 
       mqttClient.on("message", (topic, message) => {
         if (topic === DEVICE_TOPIC) {
-          // console.log(JSON.parse(message.toString()))
+          const deviceData = JSON.parse(message.toString()) as DeviceModel;
+          setDeviceModel(deviceData);
         } else if (topic === TEMPERATURE_TOPIC) {
-          // console.log(JSON.parse(message.toString()))
+          const dataPoint = JSON.parse(message.toString()) as DataPointModel;
+          setDataPointModel(dataPoint);
         }
       });
 
@@ -59,8 +66,14 @@ export default function App() {
       <NavBar />
       <Routes>
         <Route path="/" element={<Navigate replace to="/device" />}></Route>
-        <Route path="/device" element={<Device />}></Route>
-        <Route path="/dashboard" element={<DashBoard />}></Route>
+        <Route
+          path="/device"
+          element={<Device deviceModel={deviceModel} />}
+        ></Route>
+        <Route
+          path="/dashboard"
+          element={<DashBoard dataPointModel={dataPointModel} />}
+        ></Route>
         <Route path="*" element={<ErrorPage />}></Route>
       </Routes>
     </BrowserRouter>
