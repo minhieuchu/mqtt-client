@@ -41,9 +41,11 @@ export default function App() {
         if (topic === DEVICE_TOPIC) {
           const deviceData = JSON.parse(message.toString()) as DeviceModel;
           setDeviceModel(deviceData);
+          console.log("Receiving Device model:", deviceData)
         } else if (topic === TEMPERATURE_TOPIC) {
           const dataPoint = JSON.parse(message.toString()) as DataPointModel;
           setDataPointModel(dataPoint);
+          console.log("Receiving DataPoint model:", dataPoint)
         }
       });
 
