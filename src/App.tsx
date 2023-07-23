@@ -4,7 +4,6 @@ import mqtt from "precompiled-mqtt";
 import NavBar from "./components/NavBar";
 import Device from "./pages/Device";
 import DashBoard from "./pages/DashBoard";
-import ErrorPage from "./pages/ErrorPage";
 import { DataPointModel, DeviceModel, Nullable } from "./common/types";
 
 const DEVICE_TOPIC = "/device/6f9ea7c7-6297-4283-b72d-7d673d3473fd";
@@ -68,7 +67,6 @@ export default function App() {
     <BrowserRouter>
       <NavBar />
       <Routes>
-        <Route path="/" element={<Navigate replace to="/device" />}></Route>
         <Route
           path="/device"
           element={<Device deviceModel={deviceModel} />}
@@ -77,7 +75,7 @@ export default function App() {
           path="/dashboard"
           element={<DashBoard dataPointModel={dataPointModel} />}
         ></Route>
-        <Route path="*" element={<ErrorPage />}></Route>
+        <Route path="*" element={<Navigate replace to="/device" />}></Route>
       </Routes>
     </BrowserRouter>
   );
