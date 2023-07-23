@@ -5,17 +5,16 @@ import NavBar from "./components/NavBar";
 import Device from "./pages/Device";
 import DashBoard from "./pages/DashBoard";
 import ErrorPage from "./pages/ErrorPage";
-import { DataPointModel, DeviceModel } from "./common/types";
+import { DataPointModel, DeviceModel, Nullable } from "./common/types";
 
 const DEVICE_TOPIC = "/device/6f9ea7c7-6297-4283-b72d-7d673d3473fd";
 const TEMPERATURE_TOPIC = DEVICE_TOPIC + "/Temperature";
 
 export default function App() {
-  const [mqttClient, setMqttClient] = useState<mqtt.MqttClient | null>(null);
-  const [deviceModel, setDeviceModel] = useState<DeviceModel | null>(null);
-  const [dataPointModel, setDataPointModel] = useState<DataPointModel | null>(
-    null
-  );
+  const [mqttClient, setMqttClient] = useState<Nullable<mqtt.MqttClient>>(null);
+  const [deviceModel, setDeviceModel] = useState<Nullable<DeviceModel>>(null);
+  const [dataPointModel, setDataPointModel] =
+    useState<Nullable<DataPointModel>>(null);
 
   useEffect(() => {
     const host = "broker.emqx.io";
@@ -35,30 +34,32 @@ export default function App() {
     if (mqttClient) {
       mqttClient.on("connect", () => {
         console.log("Mqtt connected");
+        mqttClient.subscribe(
+          [DEVICE_TOPIC, TEMPERATURE_TOPIC],
+          { qos: 0 },
+          (err) => {
+            if (err) {
+              console.log("Subscribe error:", err);
+            }
+          }
+        );
       });
 
       mqttClient.on("message", (topic, message) => {
         if (topic === DEVICE_TOPIC) {
           const deviceData = JSON.parse(message.toString()) as DeviceModel;
           setDeviceModel(deviceData);
-          console.log("Receiving Device model:", deviceData)
+          console.log("Receiving Device model:", deviceData);
         } else if (topic === TEMPERATURE_TOPIC) {
           const dataPoint = JSON.parse(message.toString()) as DataPointModel;
           setDataPointModel(dataPoint);
-          console.log("Receiving DataPoint model:", dataPoint)
+          console.log("Receiving DataPoint model:", dataPoint);
         }
       });
 
-      mqttClient.subscribe(DEVICE_TOPIC, { qos: 0 }, (err) => {
-        if (err) {
-          console.log("Subscribe Device topic error ", err);
-        }
-      });
-
-      mqttClient.subscribe(TEMPERATURE_TOPIC, { qos: 0 }, (err) => {
-        if (err) {
-          console.log("Subscribe Temperature topic error ", err);
-        }
+      mqttClient.on("error", (err) => {
+        console.error("Connection error ", err);
+        mqttClient.end();
       });
     }
   }, [mqttClient]);
