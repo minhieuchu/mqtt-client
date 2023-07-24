@@ -1,18 +1,22 @@
 import { memo } from "react";
 import { Link, useLocation } from "react-router-dom";
+import classnames from "classnames";
 import "./NavBar.css";
 
 function NavBar() {
   const location = useLocation();
-  const isDevicePage = location.pathname.match(/\bdevice\b/);
-  const isDashboardPage = location.pathname.match(/\bdashboard\b/);
+  const isDevicePage = location.pathname.match(/^\/device$/);
+  const isDashboardPage = location.pathname.match(/^\/dashboard$/);
 
   return (
     <div className="navbar-container">
-      <Link to={"device"} className={isDevicePage ? "active" : ""}>
+      <Link to={"device"} className={classnames({ active: isDevicePage })}>
         Device
       </Link>
-      <Link to={"dashboard"} className={isDashboardPage ? "active" : ""}>
+      <Link
+        to={"dashboard"}
+        className={classnames({ active: isDashboardPage })}
+      >
         DashBoard
       </Link>
     </div>
