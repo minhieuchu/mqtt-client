@@ -68,14 +68,14 @@ export default function App() {
       <NavBar />
       <Routes>
         <Route
-          path="/device"
+          path="device"
           element={<Device deviceModel={deviceModel} />}
         ></Route>
         <Route
-          path="/dashboard"
+          path="dashboard"
           element={<DashBoard dataPointModel={dataPointModel} />}
         ></Route>
-        <Route path="*" element={<Navigate replace to="/device" />}></Route>
+        <Route path="*" element={<Navigate replace to="device" />}></Route>
       </Routes>
     </BrowserRouter>
   );
