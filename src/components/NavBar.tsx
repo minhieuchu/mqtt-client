@@ -1,6 +1,6 @@
+import classnames from "classnames";
 import { memo } from "react";
 import { Link, useLocation } from "react-router-dom";
-import classnames from "classnames";
 import "./NavBar.css";
 
 function NavBar() {

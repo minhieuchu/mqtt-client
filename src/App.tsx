@@ -1,10 +1,10 @@
+import mqtt from "precompiled-mqtt";
 import { useEffect, useState } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import mqtt from "precompiled-mqtt";
-import NavBar from "./components/NavBar";
-import Device from "./pages/Device";
-import DashBoard from "./pages/DashBoard";
 import { DataPointModel, DeviceModel, Nullable } from "./common/types";
+import NavBar from "./components/NavBar";
+import DashBoard from "./pages/DashBoard";
+import Device from "./pages/Device";
 
 const DEVICE_TOPIC = "/device/6f9ea7c7-6297-4283-b72d-7d673d3473fd";
 const TEMPERATURE_TOPIC = DEVICE_TOPIC + "/Temperature";
